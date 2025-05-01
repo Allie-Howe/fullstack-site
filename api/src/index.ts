@@ -125,8 +125,8 @@ app.post("/api/auth/login", async function (req: Request, res: Response) {
             return res.status(401).json({ message: "Invalid credentials" }); // Incorrect password
         }
 
-        // Generate JWT
-        const tokenPayload = { id: user.id, email: user.email };
+        // Generate JWT - Include firstName in the payload
+        const tokenPayload = { id: user.id, email: user.email, firstName: user.firstName };
         const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '1h' }); // Token expires in 1 hour
 
         res.json({ message: "Login successful", token });

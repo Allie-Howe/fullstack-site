@@ -11,12 +11,14 @@ function App() {
     <AuthProvider>
       <Router>
         <NavigationBar />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          {/* Add other routes here */}
-        </Routes>
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            {/* Add other routes here */}
+          </Routes>
+        </main>
       </Router>
     </AuthProvider>
   );

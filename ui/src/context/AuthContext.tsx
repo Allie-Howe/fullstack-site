@@ -1,7 +1,17 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+  id: number;
+  email: string;
+  firstName: string;
+  exp: number;
+  iat: number;
+}
 
 interface AuthContextType {
   token: string | null;
+  user: { firstName: string } | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -15,29 +25,47 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<{ firstName: string } | null>(null);
+
+  const processToken = (tokenToProcess: string | null) => {
+    if (tokenToProcess) {
+      try {
+        const decoded = jwtDecode<DecodedToken>(tokenToProcess);
+        if (decoded.exp * 1000 > Date.now()) {
+          setToken(tokenToProcess);
+          setUser({ firstName: decoded.firstName });
+          localStorage.setItem('authToken', tokenToProcess);
+        } else {
+          logout();
+        }
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+        logout();
+      }
+    } else {
+      logout();
+    }
+  }
 
   useEffect(() => {
-    // Try to load token from local storage on initial load
     const storedToken = localStorage.getItem('authToken');
-    if (storedToken) {
-      setToken(storedToken);
-    }
+    processToken(storedToken);
   }, []);
 
   const login = (newToken: string) => {
-    setToken(newToken);
-    localStorage.setItem('authToken', newToken);
+    processToken(newToken);
   };
 
   const logout = () => {
     setToken(null);
+    setUser(null);
     localStorage.removeItem('authToken');
   };
 
-  const isAuthenticated = !!token;
+  const isAuthenticated = !!token && !!user;
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, isAuthenticated }}>
+    <AuthContext.Provider value={{ token, user, login, logout, isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
