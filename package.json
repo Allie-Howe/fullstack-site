@@ -1,0 +1,17 @@
+{
+  "name": "fullstack-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fullstack monorepo with React (Vite) and Express",
+  "scripts": {
+    "dev": "pnpm --filter=\"./**\" --parallel dev",
+    "build": "pnpm --filter=\"./**\" --parallel build",
+    "start": "pnpm --filter=api start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
