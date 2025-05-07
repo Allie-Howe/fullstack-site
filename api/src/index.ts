@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { DataSource } from "typeorm";
 import { User } from "./entity/User";
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
 // Create a new DataSource instance using environment variables
