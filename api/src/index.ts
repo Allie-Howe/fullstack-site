@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config(); // Load environment variables from .env file
+
 import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { DataSource } from "typeorm";
@@ -5,27 +8,33 @@ import { User } from "./entity/User";
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
-// Create a new DataSource instance
+// Create a new DataSource instance using environment variables
 const AppDataSource = new DataSource({
     type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "root", // Replace with your MySQL username
-    password: "root", // Replace with your MySQL password
-    database: "test", // Replace with your database name
+    host: process.env.DB_HOST || "localhost",
+    port: parseInt(process.env.DB_PORT || "3306"),
+    username: process.env.DB_USERNAME || "root",
+    password: process.env.DB_PASSWORD || "", // Be cautious with default passwords in production
+    database: process.env.DB_NAME || "test",
     entities: [User],
-    synchronize: true, // Be careful with this in production!
-    logging: false,
+    synchronize: process.env.NODE_ENV === 'development', // Synchronize only in development
+    logging: process.env.NODE_ENV === 'development', // Log only in development
 })
 
 const app = express();
+// Use environment variable for port, default to 3001
 const port = process.env.PORT || 3001;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Define JWT secret (replace with environment variable in production)
-const JWT_SECRET = process.env.JWT_SECRET || 'your-very-secure-secret-key';
+// Define JWT secret from environment variable
+// It's critical this is set in a production environment
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error("FATAL ERROR: JWT_SECRET is not defined in .env file");
+    process.exit(1); // Exit if JWT_SECRET is not set
+}
 
 // Initialize TypeORM connection
 AppDataSource.initialize()
@@ -140,5 +149,5 @@ app.post("/api/auth/login", async function (req: Request, res: Response) {
 // --- End Authentication Endpoints ---
 
 app.listen(port, () => {
-    console.log(`API server listening at http://localhost:${port}`);
+    console.log(`API server listening at http://localhost:${port} in ${process.env.NODE_ENV || 'development'} mode`);
 });
