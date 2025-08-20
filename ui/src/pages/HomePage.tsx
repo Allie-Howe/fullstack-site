@@ -1,19 +1,17 @@
 import { useState, useEffect } from 'react';
 import reactLogo from '../assets/react.svg';
 import viteLogo from '/vite.svg';
-import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useAuth } from '../context/AuthContext';
+import { useAuthFetch } from '../useAuthenticatedFetch';
 
 function HomePage() {
   const [count, setCount] = useState(0);
   const [message, setMessage] = useState('');
-  const { isAuthenticated } = useAuth(); // Get auth state
+  const { isAuthenticated } = useAuth();
+  const { unAuthFetch } = useAuthFetch();
 
   useEffect(() => {
-    // Fetch the hello message - this endpoint is not protected in our example
-    fetch('/api/hello')
-      .then(response => response.json())
-      .then(data => setMessage(data.message))
-      .catch(error => console.error('Error fetching hello message:', error));
+    unAuthFetch('hello').then(data => setMessage(data?.message));
   }, []);
 
   return (

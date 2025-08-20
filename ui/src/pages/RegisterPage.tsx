@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthFetch } from '../useAuthenticatedFetch';
 
 function RegisterPage() {
   const [firstName, setFirstName] = useState('');
@@ -8,6 +9,7 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const { unAuthFetch } = useAuthFetch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -16,7 +18,7 @@ function RegisterPage() {
     setSuccess(null); // Clear previous success message
 
     try {
-      const response = await fetch('/api/auth/register', {
+      const data = await unAuthFetch('/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,14 +26,11 @@ function RegisterPage() {
         body: JSON.stringify({ firstName, lastName, email, password }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Registration failed');
+      if (!data || !data.ok) {
+        throw new Error(data?.message || 'Registration failed');
       }
 
       setSuccess('Registration successful! You can now log in.');
-      // Optionally redirect to login page after a delay or directly
       setTimeout(() => navigate('/login'), 2000);
 
     } catch (err: any) {

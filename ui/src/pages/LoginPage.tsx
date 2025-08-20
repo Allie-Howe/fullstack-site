@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useAuthFetch } from '../useAuthenticatedFetch';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -8,13 +9,14 @@ function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { unAuthFetch } = useAuthFetch();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null); // Clear previous errors
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const data = await unAuthFetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -22,10 +24,8 @@ function LoginPage() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+      if (!data || !data.ok) {
+        throw new Error(data?.message || 'Login failed');
       }
 
       login(data.token); // Update auth state with token
