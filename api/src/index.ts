@@ -45,7 +45,7 @@ AppDataSource.initialize()
         console.error("Error during Data Source initialization:", err)
     })
 
-app.get('/hello', (req: Request, res: Response) => {
+app.get('/api/hello', (req: Request, res: Response) => {
     res.json({ message: 'Hello from the API!' });
 });
 
