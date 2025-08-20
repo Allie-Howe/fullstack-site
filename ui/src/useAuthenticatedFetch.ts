@@ -2,9 +2,8 @@ import { useCallback } from 'react'
 import { useAuth } from './context/AuthContext'
 
 // TODO: This is a dumb way of doing this - put in an env file
-// const PROD_API_URL = 'https://google.com'
-// const ABSOLUTE_API_URL = import.meta.env.MODE === 'production' ? PROD_API_URL : '';
-// console.log(ABSOLUTE_API_URL)
+const PROD_API_URL = 'https://google.com'
+const ABSOLUTE_API_URL = import.meta.env.MODE === 'production' ? PROD_API_URL : '';
 
 export const useAuthFetch = () => {
   const { token } = useAuth();
@@ -19,7 +18,7 @@ export const useAuthFetch = () => {
       }
     };
 
-    const res = await fetch(`/api/${url}`, options);
+    const res = await fetch(`${ABSOLUTE_API_URL}/api/${url}`, options);
     const data: Record<string, any> = await res.json();
 
     if (res.ok) return data;
