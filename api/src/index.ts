@@ -1,22 +1,10 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import express, { Request, Response } from 'express';
-import { DataSource } from "typeorm";
 import { User } from "./entity/User";
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-
-const AppDataSource = new DataSource({
-    type: "mysql",
-    host: process.env.DB_HOST || "localhost",
-    port: parseInt(process.env.DB_PORT || "3306"),
-    username: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "test",
-    entities: [User],
-    synchronize: process.env.NODE_ENV === 'development',
-    logging: process.env.NODE_ENV === 'development',
-})
+import { AppDataSource, userRepo } from './typeormUtils';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -42,9 +30,8 @@ app.get('/api/hello', (req: Request, res: Response) => {
 });
 
 app.get("/api/users/:id", async function (req: Request, res: Response) {
-    const userRepository = AppDataSource.getRepository(User)
     try {
-        const user = await userRepository.findOneBy({
+        const user = await userRepo.findOneBy({
             id: parseInt(req.params.id)
         })
         if (!user) {
@@ -64,10 +51,8 @@ app.post("/api/auth/register", async function (req: Request, res: Response) {
         return res.status(400).json({ message: "All fields are required" });
     }
 
-    const userRepository = AppDataSource.getRepository(User);
-
     try {
-        const existingUser = await userRepository.findOneBy({ email: email });
+        const existingUser = await userRepo.findOneBy({ email: email });
         if (existingUser) {
             return res.status(409).json({ message: "Email already exists" });
         }
@@ -78,7 +63,7 @@ app.post("/api/auth/register", async function (req: Request, res: Response) {
         user.email = email;
         user.password = password;
 
-        await userRepository.save(user);
+        await userRepo.save(user);
 
         const { password: _, ...userWithoutPassword } = user;
         res.status(201).json({ message: "User created successfully", user: userWithoutPassword });
@@ -96,10 +81,8 @@ app.post("/api/auth/login", async function (req: Request, res: Response) {
         return res.status(400).json({ message: "Email and password are required" });
     }
 
-    const userRepository = AppDataSource.getRepository(User);
-
     try {
-        const user = await userRepository.createQueryBuilder("user")
+        const user = await userRepo.createQueryBuilder("user")
             .addSelect("user.password")
             .where("user.email = :email", { email })
             .getOne();
