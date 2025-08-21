@@ -15,7 +15,7 @@ if (!JWT_SECRET) {
 
 AppDataSource.initialize()
     .then(() => console.log("Data Source has been initialized!"))
-    .catch((err) => console.error("Error during Data Source initialization:", err));
+    .catch(err => console.error("Error during Data Source initialization:", err));
 
 app.get('/api/hello', (req: Request, res: Response) => {
     res.json({ message: 'Hello from the API!' });
