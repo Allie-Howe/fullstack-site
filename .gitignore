@@ -6,9 +6,6 @@ node_modules/
 dist/
 **/dist/
 
-# PNPM lockfile
-pnpm-lock.yaml
-
 # Log files
 *.log
 npm-debug.log*
