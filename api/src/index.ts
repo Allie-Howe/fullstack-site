@@ -1,7 +1,5 @@
 import * as dotenv from 'dotenv';
 dotenv.config(); // Load environment variables from .env file
-
-import 'reflect-metadata';
 import express, { Request, Response } from 'express';
 import { DataSource } from "typeorm";
 import { User } from "./entity/User";

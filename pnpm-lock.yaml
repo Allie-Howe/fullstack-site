@@ -32,9 +32,6 @@ importers:
       mysql2:
         specifier: 3.14.0
         version: 3.14.0
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
       typeorm:
         specifier: 0.3.22
         version: 0.3.22(mysql2@3.14.0)(reflect-metadata@0.2.2)
