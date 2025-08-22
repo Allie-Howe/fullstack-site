@@ -1,27 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import HomePage from './pages/HomePage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
 import NavigationBar from './components/NavigationBar';
-import './App.css'; // Keep general styles
+import './App.css';
 
+// TODO: Finish moving login/register to modal instead of pages
 function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <NavigationBar />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            {/* Add other routes here */}
-          </Routes>
-        </main>
-      </Router>
-    </AuthProvider>
-  );
+  return <AuthProvider>
+    <NavigationBar />
+    <main className="main-content">
+      <HomePage />
+    </main>
+  </AuthProvider>;
 }
 
 export default App;
