@@ -14,8 +14,8 @@ function RegisterPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null); // Clear previous errors
-    setSuccess(null); // Clear previous success message
+    setError(null);
+    setSuccess(null);
 
     try {
       const data = await unAuthFetch('/auth/register', {

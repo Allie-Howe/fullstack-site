@@ -13,7 +13,7 @@ function LoginPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
     try {
       const data = await unAuthFetch('/login', {
@@ -28,9 +28,8 @@ function LoginPage() {
         throw new Error(data?.message || 'Login failed');
       }
 
-      login(data.token); // Update auth state with token
-      navigate('/'); // Redirect to home page on successful login
-
+      login(data.token);
+      navigate('/');
     } catch (err: any) {
       console.error('Login error:', err);
       setError(err.message || 'An error occurred during login.');

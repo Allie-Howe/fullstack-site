@@ -2,16 +2,15 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
-// Basic styles for the navbar - consider moving to a CSS file for more complex styling
 const navStyle: React.CSSProperties = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '0.5rem 2rem',
-  backgroundColor: '#333', // Dark background
+  backgroundColor: '#333',
   color: 'white',
-  width: '100%', // Ensure it spans full width
-  boxSizing: 'border-box', // Include padding in width calculation
+  width: '100%',
+  boxSizing: 'border-box',
 };
 
 const linkStyle: React.CSSProperties = {
@@ -20,15 +19,14 @@ const linkStyle: React.CSSProperties = {
   marginRight: '1rem',
 };
 
-// Updated styles
 const userInfoStyle: React.CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  color: '#ccc', // Lighter color for greeting
+  color: '#ccc',
 };
 
 const logoutLinkStyle: React.CSSProperties = {
-  color: '#aaa', // Even lighter color for logout link
+  color: '#aaa',
   textDecoration: 'underline',
   marginLeft: '1rem',
   background: 'none',
@@ -61,19 +59,19 @@ function NavigationBar() {
 
   return (
     <nav style={navStyle}>
-      <div> {/* Group left-side links */}
+      <div>
         <Link to="/" style={linkStyle}>Home</Link>
       </div>
-      <div> {/* Group right-side links/button */}
+      <div>
         {!isAuthenticated ? (
           <>
             <Link to="/login" style={linkStyle}>Login</Link>
             <Link to="/register" style={linkStyle}>Register</Link>
           </>
         ) : (
-          <div style={userInfoStyle}> {/* Wrap user info and logout */}
-            <span>{getGreeting()}, {user?.firstName || 'User'}!</span> {/* Display greeting */}
-            <button onClick={handleLogout} style={logoutLinkStyle}>Not you? Logout</button> {/* Styled logout */}
+          <div style={userInfoStyle}>
+            <span>{getGreeting()}, {user?.firstName || 'User'}!</span>
+            <button onClick={handleLogout} style={logoutLinkStyle}>Not you? Logout</button>
           </div>
         )}
       </div>
