@@ -54,7 +54,7 @@ function NavigationBar() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login'); // Redirect to login after logout
+    navigate('/login');
   };
 
   return (
@@ -63,16 +63,16 @@ function NavigationBar() {
         <Link to="/" style={linkStyle}>Home</Link>
       </div>
       <div>
-        {!isAuthenticated ? (
-          <>
-            <Link to="/login" style={linkStyle}>Login</Link>
-            <Link to="/register" style={linkStyle}>Register</Link>
-          </>
-        ) : (
+        {isAuthenticated ? (
           <div style={userInfoStyle}>
             <span>{getGreeting()}, {user?.firstName || 'User'}!</span>
             <button onClick={handleLogout} style={logoutLinkStyle}>Not you? Logout</button>
           </div>
+        ) : (
+          <>
+            <Link to="/login" style={linkStyle}>Login</Link>
+            <Link to="/register" style={linkStyle}>Register</Link>
+          </>
         )}
       </div>
     </nav>
