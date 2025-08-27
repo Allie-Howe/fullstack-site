@@ -1,0 +1,9 @@
+{
+  "name": "@fullstack-site/types",
+  "version": "1.0.0",
+  "main": "dist/src/index.d.ts",
+  "types": "dist/src/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
